@@ -48,20 +48,24 @@ export default function CustomerDetailPage() {
                 {customer.address && <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {customer.address}</span>}
               </div>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Button variant="outline" size="sm" onClick={() => setShowQR(true)} className="gap-1.5">
-                <QrCode className="h-4 w-4" /> {t('qrCode')}
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setShowEMI(true)} className="gap-1.5">
-                <Calculator className="h-4 w-4" /> EMI
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => exportCustomerStatementPDF(customer, customerTx)} className="gap-1.5">
-                <FileDown className="h-4 w-4" /> PDF
-              </Button>
-              <Button variant="outline" size="sm" onClick={handlePrint} className="gap-1.5">
-                <Printer className="h-4 w-4" /> {t('print')}
-              </Button>
-              <Button onClick={() => setShowTxDialog(true)} className="gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <div className="flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" onClick={() => setShowQR(true)} className="gap-1.5 flex-1 sm:flex-none">
+                  <QrCode className="h-4 w-4" /> {t('qrCode')}
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => setShowEMI(true)} className="gap-1.5 flex-1 sm:flex-none">
+                  <Calculator className="h-4 w-4" /> EMI
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" onClick={() => exportCustomerStatementPDF(customer, customerTx)} className="gap-1.5 flex-1 sm:flex-none">
+                  <FileDown className="h-4 w-4" /> PDF
+                </Button>
+                <Button variant="outline" size="sm" onClick={handlePrint} className="gap-1.5 flex-1 sm:flex-none">
+                  <Printer className="h-4 w-4" /> {t('print')}
+                </Button>
+              </div>
+              <Button onClick={() => setShowTxDialog(true)} className="gap-2 w-full sm:w-auto">
                 <Plus className="h-4 w-4" /> Add Entry
               </Button>
             </div>

@@ -59,16 +59,16 @@ export default function ReportsPage() {
 
       {reportTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="rounded-xl border bg-card p-5 shadow-sm animate-fade-in">
+          <div className="rounded-xl border bg-card p-4 sm:p-5 shadow-sm animate-fade-in">
             <h3 className="font-display font-semibold text-lg mb-4">Monthly Cash Flow</h3>
-            <div className="h-[280px]">
+            <div className="h-[200px] sm:h-[280px]">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={monthlyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="name" tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }} />
-                  <YAxis tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }} tickFormatter={v => `₹${(v/1000).toFixed(0)}k`} />
-                  <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }} formatter={(v: number) => [`₹${v.toLocaleString('en-IN')}`, '']} />
-                  <Legend />
+                  <XAxis dataKey="name" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} />
+                  <YAxis tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} tickFormatter={v => `₹${(v/1000).toFixed(0)}k`} />
+                  <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px', fontSize: '12px' }} formatter={(v: number) => [`₹${v.toLocaleString('en-IN')}`, '']} />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
                   <Area type="monotone" dataKey="given" name="Given" stroke="hsl(var(--cash-out))" fill="hsl(var(--cash-out))" fillOpacity={0.1} strokeWidth={2} />
                   <Area type="monotone" dataKey="taken" name="Received" stroke="hsl(var(--cash-in))" fill="hsl(var(--cash-in))" fillOpacity={0.1} strokeWidth={2} />
                 </AreaChart>
@@ -76,8 +76,21 @@ export default function ReportsPage() {
             </div>
           </div>
 
-          <div className="rounded-xl border bg-card p-5 shadow-sm animate-fade-in" style={{ animationDelay: '100ms' }}>
+          <div className="rounded-xl border bg-card p-4 sm:p-5 shadow-sm animate-fade-in" style={{ animationDelay: '100ms' }}>
             <h3 className="font-display font-semibold text-lg mb-4">Payment Methods</h3>
+            <div className="h-[200px] sm:h-[280px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={methodData} cx="50%" cy="50%" outerRadius={60} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
+                    {methodData.map((_, i) => <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip formatter={(v: number) => [`₹${v.toLocaleString('en-IN')}`, 'Amount']} contentStyle={{ fontSize: '12px' }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      )}
             <div className="h-[280px]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>

@@ -110,32 +110,36 @@ export default function SettingsPage() {
         </div>
 
         <Tabs defaultValue="business" className="space-y-6">
-          <TabsList className="bg-muted">
-            <TabsTrigger value="business">Business</TabsTrigger>
-            <TabsTrigger value="preferences">Preferences</TabsTrigger>
-            <TabsTrigger value="interest">Interest & Charges</TabsTrigger>
-            <TabsTrigger value="security">Security</TabsTrigger>
-            <TabsTrigger value="logs">Activity Logs</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto">
+            <TabsList className="bg-muted w-full sm:w-auto">
+              <TabsTrigger value="business" className="text-xs sm:text-sm">Business</TabsTrigger>
+              <TabsTrigger value="preferences" className="text-xs sm:text-sm">Preferences</TabsTrigger>
+              <TabsTrigger value="interest" className="text-xs sm:text-sm">Interest</TabsTrigger>
+              <TabsTrigger value="security" className="text-xs sm:text-sm">Security</TabsTrigger>
+              <TabsTrigger value="logs" className="text-xs sm:text-sm">Logs</TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="business" className="space-y-6">
-            <div className="rounded-xl border bg-card p-6 shadow-sm space-y-5">
+            <div className="rounded-xl border bg-card p-4 sm:p-6 shadow-sm space-y-5">
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10"><Building className="h-5 w-5 text-primary" /></div>
                 <div><h3 className="font-display font-semibold">Business Profile</h3><p className="text-xs text-muted-foreground">Your business information</p></div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div><Label>Business Name</Label><Input value={businessName} onChange={e => setBusinessName(e.target.value)} placeholder="Your business name" /></div>
-                <div><Label>Phone</Label><Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 9876543210" /></div>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div><Label>Business Name</Label><Input value={businessName} onChange={e => setBusinessName(e.target.value)} placeholder="Your business name" /></div>
+                  <div><Label>Phone</Label><Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 9876543210" /></div>
+                </div>
                 <div><Label>Address</Label><Input value={businessAddress} onChange={e => setBusinessAddress(e.target.value)} placeholder="Business address" /></div>
                 <div><Label>GSTIN</Label><Input value={gstin} onChange={e => setGstin(e.target.value)} placeholder="22AAAAA0000A1Z5" /></div>
               </div>
-              <Button onClick={saveProfile} disabled={loading}>
+              <Button onClick={saveProfile} disabled={loading} className="w-full sm:w-auto">
                 {loading ? 'Saving...' : t('save')}
               </Button>
             </div>
 
-            <div className="rounded-xl border bg-card p-6 shadow-sm space-y-5">
+            <div className="rounded-xl border bg-card p-4 sm:p-6 shadow-sm space-y-5">
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10"><User className="h-5 w-5 text-primary" /></div>
                 <div><h3 className="font-display font-semibold">Personal Profile</h3><p className="text-xs text-muted-foreground">Admin account details</p></div>
@@ -144,7 +148,7 @@ export default function SettingsPage() {
                 <div><Label>Full Name</Label><Input value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" /></div>
                 <div><Label>Email</Label><Input value={email} onChange={e => setEmail(e.target.value)} type="email" placeholder="your@email.com" /></div>
               </div>
-              <Button onClick={saveProfile} disabled={loading}>
+              <Button onClick={saveProfile} disabled={loading} className="w-full sm:w-auto">
                 {loading ? 'Saving...' : t('save')}
               </Button>
             </div>

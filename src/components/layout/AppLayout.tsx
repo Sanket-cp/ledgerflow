@@ -136,14 +136,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Mobile Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border lg:hidden">
-        <div className="flex items-stretch justify-around">
+        <div className="flex items-stretch justify-around px-1">
           {bottomNavItems.map(item => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.to === '/'}
               className={({ isActive }) =>
-                `flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium transition-colors ${
+                `flex flex-1 flex-col items-center gap-0.5 py-2 px-1 text-[10px] font-medium transition-colors ${
                   isActive
                     ? 'text-primary'
                     : 'text-muted-foreground'
@@ -152,10 +152,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             >
               {({ isActive }) => (
                 <>
-                  <div className={`flex items-center justify-center w-10 h-7 rounded-full transition-colors ${isActive ? 'bg-primary/10' : ''}`}>
-                    <item.icon className="h-4.5 w-4.5" />
+                  <div className={`flex items-center justify-center w-8 h-6 rounded-full transition-colors ${isActive ? 'bg-primary/10' : ''}`}>
+                    <item.icon className="h-4 w-4" />
                   </div>
-                  <span>{t(item.key)}</span>
+                  <span className="truncate max-w-full">{t(item.key)}</span>
                 </>
               )}
             </NavLink>
@@ -163,12 +163,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           {/* More button */}
           <button
             onClick={() => setMoreOpen(!moreOpen)}
-            className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium transition-colors ${moreOpen ? 'text-primary' : 'text-muted-foreground'}`}
+            className={`flex flex-1 flex-col items-center gap-0.5 py-2 px-1 text-[10px] font-medium transition-colors ${moreOpen ? 'text-primary' : 'text-muted-foreground'}`}
           >
-            <div className={`flex items-center justify-center w-10 h-7 rounded-full transition-colors ${moreOpen ? 'bg-primary/10' : ''}`}>
-              <MoreHorizontal className="h-4.5 w-4.5" />
+            <div className={`flex items-center justify-center w-8 h-6 rounded-full transition-colors ${moreOpen ? 'bg-primary/10' : ''}`}>
+              <MoreHorizontal className="h-4 w-4" />
             </div>
-            <span>More</span>
+            <span className="truncate">More</span>
           </button>
         </div>
 

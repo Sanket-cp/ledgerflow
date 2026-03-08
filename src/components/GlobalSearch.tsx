@@ -26,6 +26,13 @@ export default function GlobalSearch() {
     <>
       <button
         onClick={() => setOpen(true)}
+        className="flex lg:hidden h-8 w-8 items-center justify-center rounded-lg border border-border hover:bg-muted transition-colors"
+      >
+        <Search className="h-4 w-4" />
+      </button>
+      
+      <button
+        onClick={() => setOpen(true)}
         className="hidden lg:flex items-center gap-2 rounded-lg border border-border bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted transition-colors"
       >
         <Search className="h-3.5 w-3.5" />

@@ -52,7 +52,7 @@ export default function EMICalculator({ open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-display flex items-center gap-2">
             <Calculator className="h-5 w-5" /> EMI Calculator
@@ -67,7 +67,7 @@ export default function EMICalculator({ open, onOpenChange }: Props) {
             <Label>Annual Interest Rate (%)</Label>
             <Input type="number" value={rate} onChange={e => setRate(e.target.value)} step="0.1" />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <Label>Tenure</Label>
               <Input type="number" value={tenure} onChange={e => setTenure(e.target.value)} />
@@ -84,22 +84,22 @@ export default function EMICalculator({ open, onOpenChange }: Props) {
             </div>
           </div>
 
-          <div className="rounded-xl border bg-muted/50 p-4 space-y-3">
+          <div className="rounded-xl border bg-muted/50 p-3 sm:p-4 space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Daily EMI</span>
-              <span className="text-base font-display font-semibold text-blue-600">{formatCurrencyWithDecimals(dailyEMI)}</span>
+              <span className="text-sm sm:text-base font-display font-semibold text-blue-600">{formatCurrencyWithDecimals(dailyEMI)}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Weekly EMI</span>
-              <span className="text-base font-display font-semibold text-purple-600">{formatCurrencyWithDecimals(weeklyEMI)}</span>
+              <span className="text-sm sm:text-base font-display font-semibold text-purple-600">{formatCurrencyWithDecimals(weeklyEMI)}</span>
             </div>
             <div className="flex justify-between items-center border-t border-border pt-2">
               <span className="text-sm text-muted-foreground">Monthly EMI</span>
-              <span className="text-lg font-display font-bold text-primary">{formatCurrencyWithDecimals(monthlyEMI)}</span>
+              <span className="text-base sm:text-lg font-display font-bold text-primary">{formatCurrencyWithDecimals(monthlyEMI)}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Yearly EMI</span>
-              <span className="text-base font-display font-semibold text-green-600">{formatCurrencyWithDecimals(yearlyEMI)}</span>
+              <span className="text-sm sm:text-base font-display font-semibold text-green-600">{formatCurrencyWithDecimals(yearlyEMI)}</span>
             </div>
             <div className="border-t border-border pt-2 space-y-2">
               <div className="flex justify-between">
@@ -112,17 +112,19 @@ export default function EMICalculator({ open, onOpenChange }: Props) {
               </div>
             </div>
 
-            {/* Verification Section */}
+            {/* Verification Section - Collapsible on mobile */}
             {months > 0 && monthlyEMI > 0 && (
-              <div className="border-t border-border pt-2">
-                <p className="text-xs text-muted-foreground mb-2">Verification (should be equal):</p>
-                <div className="grid grid-cols-2 gap-2 text-xs">
+              <details className="border-t border-border pt-2">
+                <summary className="text-xs text-muted-foreground cursor-pointer hover:text-foreground">
+                  Verification (tap to expand)
+                </summary>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 mt-2 text-xs">
                   <div>Daily × 365: {formatCurrencyWithDecimals(dailyEMI * 365)}</div>
                   <div>Weekly × 52: {formatCurrencyWithDecimals(weeklyEMI * 52)}</div>
                   <div>Monthly × 12: {formatCurrencyWithDecimals(monthlyEMI * 12)}</div>
                   <div>Yearly × 1: {formatCurrencyWithDecimals(yearlyEMI)}</div>
                 </div>
-              </div>
+              </details>
             )}
 
             {months > 0 && monthlyEMI > 0 && (
