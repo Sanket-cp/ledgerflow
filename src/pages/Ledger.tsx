@@ -71,32 +71,34 @@ export default function LedgerPage() {
         </div>
 
         <div className="space-y-3">
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col gap-3">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input placeholder={t('search')} value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
             </div>
-            <Select value={typeFilter} onValueChange={setTypeFilter}>
-              <SelectTrigger className="w-[140px]"><SelectValue placeholder="Type" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="given">{t('given')}</SelectItem>
-                <SelectItem value="taken">{t('received')}</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={methodFilter} onValueChange={setMethodFilter}>
-              <SelectTrigger className="w-[140px]"><SelectValue placeholder="Method" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Methods</SelectItem>
-                <SelectItem value="cash">Cash</SelectItem>
-                <SelectItem value="bank">Bank</SelectItem>
-                <SelectItem value="upi">UPI</SelectItem>
-                <SelectItem value="online">Online</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="outline" size="sm" onClick={() => setShowAdvanced(!showAdvanced)} className="gap-1.5">
-              <Calendar className="h-4 w-4" /> Filters
-            </Button>
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              <Select value={typeFilter} onValueChange={setTypeFilter}>
+                <SelectTrigger className="w-[140px] shrink-0"><SelectValue placeholder="Type" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="given">{t('given')}</SelectItem>
+                  <SelectItem value="taken">{t('received')}</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={methodFilter} onValueChange={setMethodFilter}>
+                <SelectTrigger className="w-[140px] shrink-0"><SelectValue placeholder="Method" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Methods</SelectItem>
+                  <SelectItem value="cash">Cash</SelectItem>
+                  <SelectItem value="bank">Bank</SelectItem>
+                  <SelectItem value="upi">UPI</SelectItem>
+                  <SelectItem value="online">Online</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button variant="outline" size="sm" onClick={() => setShowAdvanced(!showAdvanced)} className="gap-1.5 shrink-0">
+                <Calendar className="h-4 w-4" /> Filters
+              </Button>
+            </div>
           </div>
 
           {showAdvanced && (

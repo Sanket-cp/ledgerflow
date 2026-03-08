@@ -52,27 +52,29 @@ export default function DashboardPage() {
   return (
     <PageTransition>
       <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl lg:text-3xl font-display font-bold">{t('dashboard')}</h1>
-            <p className="text-muted-foreground mt-1">{t('overview')} of your financial activity</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm" onClick={() => setShowEMI(true)} className="gap-1.5">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl lg:text-3xl font-display font-bold">{t('dashboard')}</h1>
+              <p className="text-muted-foreground mt-1 text-sm">{t('overview')} of your financial activity</p>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => setShowEMI(true)} className="gap-1.5 w-full sm:w-auto">
               <Calculator className="h-4 w-4" /> {t('emiCalculator')}
             </Button>
-            <div className="flex items-center gap-3 rounded-xl border bg-card p-4 shadow-sm animate-fade-in">
-              <div className="text-center">
-                <p className="text-xs text-muted-foreground">{t('businessHealth')}</p>
-                <p className={`text-3xl font-display font-bold ${healthColor}`}>{healthScore}</p>
-              </div>
-              <div className="h-10 w-10 rounded-full border-4 border-muted flex items-center justify-center relative">
-                <svg className="absolute inset-0 -rotate-90" viewBox="0 0 36 36">
-                  <circle cx="18" cy="18" r="15" fill="none" stroke="hsl(var(--muted))" strokeWidth="3" />
-                  <circle cx="18" cy="18" r="15" fill="none" stroke={healthScore >= 75 ? 'hsl(var(--cash-in))' : healthScore >= 50 ? 'hsl(var(--warning))' : 'hsl(var(--cash-out))'} strokeWidth="3" strokeDasharray={`${healthScore * 0.94} 94`} strokeLinecap="round" />
-                </svg>
-                <Activity className={`h-3.5 w-3.5 ${healthColor}`} />
-              </div>
+          </div>
+          
+          {/* Business Health Card - Separate row on mobile */}
+          <div className="flex items-center gap-3 rounded-xl border bg-card p-3 sm:p-4 shadow-sm animate-fade-in w-full sm:w-auto sm:self-end">
+            <div className="text-center">
+              <p className="text-xs text-muted-foreground">{t('businessHealth')}</p>
+              <p className={`text-2xl sm:text-3xl font-display font-bold ${healthColor}`}>{healthScore}</p>
+            </div>
+            <div className="h-10 w-10 rounded-full border-4 border-muted flex items-center justify-center relative shrink-0">
+              <svg className="absolute inset-0 -rotate-90" viewBox="0 0 36 36">
+                <circle cx="18" cy="18" r="15" fill="none" stroke="hsl(var(--muted))" strokeWidth="3" />
+                <circle cx="18" cy="18" r="15" fill="none" stroke={healthScore >= 75 ? 'hsl(var(--cash-in))' : healthScore >= 50 ? 'hsl(var(--warning))' : 'hsl(var(--cash-out))'} strokeWidth="3" strokeDasharray={`${healthScore * 0.94} 94`} strokeLinecap="round" />
+              </svg>
+              <Activity className={`h-3.5 w-3.5 ${healthColor}`} />
             </div>
           </div>
         </div>
