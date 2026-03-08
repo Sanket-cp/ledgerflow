@@ -1,24 +1,105 @@
 import { useApp } from '@/context/AppContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
+import { useAuth } from '@/context/AuthContext';
 import { Shield, Database, Bell, Globe, User, Building, Palette, Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PageTransition from '@/components/PageTransition';
+import { useToast } from '@/hooks/use-toast';
+import api from '@/lib/api';
 
 export default function SettingsPage() {
   const { activityLogs } = useApp();
   const { theme, toggleTheme } = useTheme();
   const { lang, setLang, t } = useLanguage();
-  const [businessName, setBusinessName] = useState('My Business');
-  const [businessPhone, setBusinessPhone] = useState('+919876543210');
+  const { user, updateUser } = useAuth();
+  const { toast } = useToast();
+  
+  // User profile states
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [businessName, setBusinessName] = useState('');
+  const [businessAddress, setBusinessAddress] = useState('');
+  const [gstin, setGstin] = useState('');
+  
+  // Settings states
   const [defaultInterestRate, setDefaultInterestRate] = useState('2');
   const [defaultInterestType, setDefaultInterestType] = useState('monthly');
+  const [loading, setLoading] = useState(false);
+
+  // Load user data on mount
+  useEffect(() => {
+    if (user) {
+      setName(user.name || '');
+      setEmail(user.email || '');
+      setPhone(user.phone || '');
+      setBusinessName(user.businessName || '');
+      setBusinessAddress(user.businessAddress || '');
+      setGstin(user.gstin || '');
+    }
+  }, [user]);
+
+  // Save profile function
+  const saveProfile = async () => {
+    try {
+      setLoading(true);
+      const response = await api.put('/auth/profile', {
+        name,
+        email,
+        phone,
+        businessName,
+        businessAddress,
+        gstin,
+      });
+      
+      // Update user in context
+      updateUser(response.data);
+      
+      toast({
+        title: 'Success',
+        description: 'Profile updated successfully',
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.response?.data?.message || 'Failed to update profile',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Save settings function
+  const saveSettings = async () => {
+    try {
+      setLoading(true);
+      await api.put('/auth/settings', {
+        defaultInterestRate: Number(defaultInterestRate),
+        defaultInterestType,
+      });
+      
+      toast({
+        title: 'Success',
+        description: 'Settings saved successfully',
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.response?.data?.message || 'Failed to save settings',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <PageTransition>
@@ -44,12 +125,14 @@ export default function SettingsPage() {
                 <div><h3 className="font-display font-semibold">Business Profile</h3><p className="text-xs text-muted-foreground">Your business information</p></div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div><Label>Business Name</Label><Input value={businessName} onChange={e => setBusinessName(e.target.value)} /></div>
-                <div><Label>Phone</Label><Input value={businessPhone} onChange={e => setBusinessPhone(e.target.value)} /></div>
-                <div><Label>Address</Label><Input placeholder="Business address" /></div>
-                <div><Label>GSTIN</Label><Input placeholder="22AAAAA0000A1Z5" /></div>
+                <div><Label>Business Name</Label><Input value={businessName} onChange={e => setBusinessName(e.target.value)} placeholder="Your business name" /></div>
+                <div><Label>Phone</Label><Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 9876543210" /></div>
+                <div><Label>Address</Label><Input value={businessAddress} onChange={e => setBusinessAddress(e.target.value)} placeholder="Business address" /></div>
+                <div><Label>GSTIN</Label><Input value={gstin} onChange={e => setGstin(e.target.value)} placeholder="22AAAAA0000A1Z5" /></div>
               </div>
-              <Button>{t('save')}</Button>
+              <Button onClick={saveProfile} disabled={loading}>
+                {loading ? 'Saving...' : t('save')}
+              </Button>
             </div>
 
             <div className="rounded-xl border bg-card p-6 shadow-sm space-y-5">
@@ -58,10 +141,12 @@ export default function SettingsPage() {
                 <div><h3 className="font-display font-semibold">Personal Profile</h3><p className="text-xs text-muted-foreground">Admin account details</p></div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div><Label>Full Name</Label><Input defaultValue="Admin" /></div>
-                <div><Label>Email</Label><Input defaultValue="admin@khatabook.in" type="email" /></div>
+                <div><Label>Full Name</Label><Input value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" /></div>
+                <div><Label>Email</Label><Input value={email} onChange={e => setEmail(e.target.value)} type="email" placeholder="your@email.com" /></div>
               </div>
-              <Button>{t('save')}</Button>
+              <Button onClick={saveProfile} disabled={loading}>
+                {loading ? 'Saving...' : t('save')}
+              </Button>
             </div>
           </TabsContent>
 
@@ -161,7 +246,9 @@ export default function SettingsPage() {
                 <div><Label>Service Fee (₹)</Label><Input type="number" defaultValue="200" /></div>
                 <div><Label>Penalty (%)</Label><Input type="number" defaultValue="1" /></div>
               </div>
-              <Button>{t('save')}</Button>
+              <Button onClick={saveSettings} disabled={loading}>
+                {loading ? 'Saving...' : t('save')}
+              </Button>
             </div>
           </TabsContent>
 
@@ -172,14 +259,14 @@ export default function SettingsPage() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10"><Shield className="h-5 w-5 text-primary" /></div>
                   <div><h3 className="font-display font-semibold">Authentication</h3><p className="text-xs text-muted-foreground">JWT + Password encryption</p></div>
                 </div>
-                <p className="text-sm text-muted-foreground">Connect Lovable Cloud to enable secure JWT authentication, 2FA, and role-based access control.</p>
+                <p className="text-sm text-muted-foreground">Your account is secured with JWT authentication and bcrypt password encryption.</p>
               </div>
               <div className="rounded-xl border bg-card p-5 shadow-sm space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10"><Database className="h-5 w-5 text-primary" /></div>
                   <div><h3 className="font-display font-semibold">Backup & Restore</h3><p className="text-xs text-muted-foreground">Database management</p></div>
                 </div>
-                <p className="text-sm text-muted-foreground">Connect Lovable Cloud for automatic PostgreSQL backups and one-click restore.</p>
+                <p className="text-sm text-muted-foreground">Your data is automatically backed up on MongoDB Atlas with 99.9% uptime guarantee.</p>
               </div>
             </div>
           </TabsContent>

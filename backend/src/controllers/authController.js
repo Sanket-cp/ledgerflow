@@ -90,3 +90,74 @@ export const getMe = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @desc    Update user profile
+// @route   PUT /api/auth/profile
+// @access  Private
+export const updateProfile = async (req, res) => {
+  try {
+    const { name, email, phone, businessName, businessAddress, gstin } = req.body;
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if email is being changed and if it already exists
+    if (email && email !== user.email) {
+      const emailExists = await User.findOne({ email });
+      if (emailExists) {
+        return res.status(400).json({ message: 'Email already exists' });
+      }
+    }
+
+    // Update user fields
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+    user.businessName = businessName || user.businessName;
+    user.businessAddress = businessAddress || user.businessAddress;
+    user.gstin = gstin || user.gstin;
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      phone: updatedUser.phone,
+      businessName: updatedUser.businessName,
+      businessAddress: updatedUser.businessAddress,
+      gstin: updatedUser.gstin,
+      token: generateToken(updatedUser._id),
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Update user settings
+// @route   PUT /api/auth/settings
+// @access  Private
+export const updateSettings = async (req, res) => {
+  try {
+    const { defaultInterestRate, defaultInterestType } = req.body;
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update settings
+    user.defaultInterestRate = defaultInterestRate || user.defaultInterestRate;
+    user.defaultInterestType = defaultInterestType || user.defaultInterestType;
+
+    await user.save();
+
+    res.json({ message: 'Settings updated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

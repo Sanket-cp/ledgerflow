@@ -28,6 +28,23 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  businessAddress: {
+    type: String,
+    trim: true,
+  },
+  gstin: {
+    type: String,
+    trim: true,
+  },
+  defaultInterestRate: {
+    type: Number,
+    default: 2,
+  },
+  defaultInterestType: {
+    type: String,
+    enum: ['daily', 'monthly', 'yearly'],
+    default: 'monthly',
+  },
   isActive: {
     type: Boolean,
     default: true,

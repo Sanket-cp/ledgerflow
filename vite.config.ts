@@ -20,22 +20,7 @@ export default defineConfig(({ mode }) => ({
         navigateFallbackDenylist: [/^\/~oauth/],
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
       },
-      manifest: {
-        name: 'LedgerFlow - Financial Tracker',
-        short_name: 'LedgerFlow',
-        description: 'Advanced financial tracking and ledger management application',
-        theme_color: '#1a9a6c',
-        background_color: '#f5f7f5',
-        display: 'standalone',
-        orientation: 'portrait-primary',
-        start_url: '/',
-        icons: [
-          { src: 'logo.png', sizes: '512x512', type: 'image/png' },
-          { src: 'pwa-192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'pwa-512.png', sizes: '512x512', type: 'image/png' },
-          { src: 'pwa-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
-        ],
-      },
+      manifest: false, // Disable manifest for now
     }),
   ],
   resolve: {
