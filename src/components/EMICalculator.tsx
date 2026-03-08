@@ -33,14 +33,22 @@ export default function EMICalculator({ open, onOpenChange }: Props) {
     monthlyEMI = P / months;
   }
 
+  // Calculate other EMIs based on monthly EMI for consistency
+  const yearlyEMI = monthlyEMI * 12;
+  const weeklyEMI = yearlyEMI / 52; // More accurate: yearly / 52 weeks
+  const dailyEMI = yearlyEMI / 365; // More accurate: yearly / 365 days
+
   const totalPayment = monthlyEMI * months;
   const totalInterest = totalPayment - P;
 
-  // Calculate Daily EMI (monthly / 30 days)
-  const dailyEMI = monthlyEMI / 30;
-
-  // Calculate Weekly EMI (monthly * 12 months / 52 weeks)
-  const weeklyEMI = (monthlyEMI * 12) / 52;
+  // Format currency with decimals (no rounding for display)
+  const formatCurrencyWithDecimals = (amount: number): string => {
+    if (amount === 0) return '₹0.00';
+    return '₹' + amount.toLocaleString('en-IN', { 
+      minimumFractionDigits: 2, 
+      maximumFractionDigits: 2 
+    });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -79,26 +87,43 @@ export default function EMICalculator({ open, onOpenChange }: Props) {
           <div className="rounded-xl border bg-muted/50 p-4 space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Daily EMI</span>
-              <span className="text-base font-display font-semibold text-blue-600">{formatCurrency(Math.round(dailyEMI))}</span>
+              <span className="text-base font-display font-semibold text-blue-600">{formatCurrencyWithDecimals(dailyEMI)}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Weekly EMI</span>
-              <span className="text-base font-display font-semibold text-purple-600">{formatCurrency(Math.round(weeklyEMI))}</span>
+              <span className="text-base font-display font-semibold text-purple-600">{formatCurrencyWithDecimals(weeklyEMI)}</span>
             </div>
             <div className="flex justify-between items-center border-t border-border pt-2">
               <span className="text-sm text-muted-foreground">Monthly EMI</span>
-              <span className="text-lg font-display font-bold text-primary">{formatCurrency(Math.round(monthlyEMI))}</span>
+              <span className="text-lg font-display font-bold text-primary">{formatCurrencyWithDecimals(monthlyEMI)}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Yearly EMI</span>
+              <span className="text-base font-display font-semibold text-green-600">{formatCurrencyWithDecimals(yearlyEMI)}</span>
             </div>
             <div className="border-t border-border pt-2 space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">Total Interest</span>
-                <span className="text-sm font-semibold text-cash-out">{formatCurrency(Math.round(totalInterest))}</span>
+                <span className="text-sm font-semibold text-cash-out">{formatCurrencyWithDecimals(totalInterest)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">Total Payment</span>
-                <span className="text-sm font-semibold">{formatCurrency(Math.round(totalPayment))}</span>
+                <span className="text-sm font-semibold">{formatCurrencyWithDecimals(totalPayment)}</span>
               </div>
             </div>
+
+            {/* Verification Section */}
+            {months > 0 && monthlyEMI > 0 && (
+              <div className="border-t border-border pt-2">
+                <p className="text-xs text-muted-foreground mb-2">Verification (should be equal):</p>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>Daily × 365: {formatCurrencyWithDecimals(dailyEMI * 365)}</div>
+                  <div>Weekly × 52: {formatCurrencyWithDecimals(weeklyEMI * 52)}</div>
+                  <div>Monthly × 12: {formatCurrencyWithDecimals(monthlyEMI * 12)}</div>
+                  <div>Yearly × 1: {formatCurrencyWithDecimals(yearlyEMI)}</div>
+                </div>
+              </div>
+            )}
 
             {months > 0 && monthlyEMI > 0 && (
               <div className="mt-3">
