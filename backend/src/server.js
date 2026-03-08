@@ -32,6 +32,8 @@ app.use(cors({
     'http://localhost:8081',
     'http://localhost:5173',
     'https://ledgerflow-olive.vercel.app',
+    'https://ledgerflow-hye8860l6-sankets-projects-a773d542.vercel.app',
+    /https:\/\/ledgerflow-.*\.vercel\.app$/,
   ],
   credentials: true,
 }));
